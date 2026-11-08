@@ -1,0 +1,30 @@
+{
+  "name": "load-balanced-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An educational load-balanced backend system",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --env-file=.env --import tsx --watch src/server.ts",
+    "build": "tsc -p tsconfig.json && mkdir -p dist/db/migrations && cp src/db/migrations/*.sql dist/db/migrations/",
+    "start": "node --env-file=.env dist/server.js",
+    "migrate": "npm run build && node --env-file=.env dist/db/migrate.js",
+    "test": "npm run build && node --env-file=.env --import tsx test/require-test-database.ts && node --env-file=.env --import tsx --test test/*.test.ts",
+    "test:unit": "npm run build && tsx --test test/app.test.ts test/items.unit.test.ts",
+    "test:integration": "npm run build && node --env-file=.env --import tsx test/require-test-database.ts && node --env-file=.env --import tsx --test test/*.integration.test.ts",
+    "lint": "tsc --noEmit -p tsconfig.test.json"
+  },
+  "dependencies": {
+    "fastify": "^5.2.1",
+    "pg": "^8.13.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "@types/pg": "^8.11.11",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}
